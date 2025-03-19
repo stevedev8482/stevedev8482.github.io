@@ -1,0 +1,95 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+header {
+    background: #35424a;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+nav {
+    background: #e8491d;
+    color: white;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+main {
+    padding: 20px;
+}
+
+section {
+    margin-bottom: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background: #35424a;
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Устанавливаем фоновое изображение для всей страницы */
+/* Устанавливаем фоновое изображение для всей страницы */
+body {
+    background-image: url('background.jpg'); /* Путь к фоновому изображению */
+    background-size: cover; /* Масштабируем изображение */
+    background-position: center; /* Центрируем изображение */
+    background-repeat: no-repeat; /* Не повторяем изображение */
+    font-family: Arial, sans-serif; /* Шрифт */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Центрируем содержимое по горизонтали */
+    color: black; /* Цвет текста */
+}
+
+/* Центрируем контейнер с текстом и задаем размеры */
+.center-container {
+    max-width: 800px; /* Максимальная ширина контейнера */
+    width: 90%; /* Ширина контейнера */
+    background-color: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый фон для контейнера */
+    padding: 20px; /* Внутренние отступы */
+    border-radius: 8px; /* Закругленные углы */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень */
+    margin: 20px; /* Внешние отступы */
+}
+
+/* Отображение заголовков и основного текста */
+h1, h2 {
+    text-align: center; /* Центрируем текст заголовков */
+}
+
+ul {
+    list-style-type: none; /* Убираем маркеры у списка */
+    padding: 0; /* Убираем отступы */
+}
+
+footer {
+    text-align: center; /* Центрируем текст в футере */
+    margin-top: 20px; /* Отступ сверху для футера */
+}
