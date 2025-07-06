@@ -1,42 +1,679 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Моя Сайт-визитка</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Николай Олегович - dEv</title>
+
+    <!-- Шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Sawarabi+Mincho&display=swap" rel="stylesheet" />
+
+    <style>
+        /* Reset */
+        * {
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            margin: 0;
+            font-family: 'Press Start 2P', cursive, monospace;
+            background:
+                    url('https://i.ibb.co/2n5YzXz/sakura-bg.png') no-repeat center top / cover,
+                    linear-gradient(135deg, #fce4ec, #b3e5fc);
+            color: #2b1a3a;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- Падающая сакура --- */
+        #sakura-container {
+            pointer-events: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+            z-index: 9999;
+        }
+        .sakura {
+            position: absolute;
+            top: -40px;
+            width: 24px;
+            height: 24px;
+            background: url('https://i.ibb.co/5KZqkG2/sakura-petal.png') no-repeat center / contain;
+            opacity: 0.8;
+            animation-timing-function: linear;
+            user-select: none;
+            will-change: transform;
+        }
+
+        /* Заголовки с японским шрифтом */
+        h2, #section4 h2 {
+            font-family: 'Sawarabi Mincho', serif;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: none;
+        }
+
+        /* Навигация */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 36px;
+            padding: 16px 0;
+            background: rgba(255 255 255 / 0.15);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid rgba(255 192 203 / 0.4);
+            font-weight: 700;
+            font-size: 14px;
+            user-select: none;
+            z-index: 1000;
+            box-shadow:
+                    0 0 12px 2px #ff69b4cc,
+                    inset 0 -2px 8px #ff69b4cc;
+            transition: background-color 0.3s ease;
+        }
+        nav:hover {
+            background: rgba(255 255 255 / 0.3);
+        }
+        nav a {
+            text-decoration: none;
+            color: #4b004b;
+            padding: 10px 24px;
+            border-radius: 12px;
+            box-shadow:
+                    0 0 0 transparent;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        nav a::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0; bottom: 0;
+            width: 100%;
+            background: linear-gradient(120deg, transparent, #ff66cccc, transparent);
+            transition: left 0.4s ease;
+            z-index: 0;
+        }
+        nav a:hover::before {
+            left: 0;
+        }
+        nav a:hover {
+            color: #ff33bb;
+            box-shadow:
+                    0 0 12px #ff33bb,
+                    0 0 20px #ff33bb;
+        }
+        nav a.active {
+            background: linear-gradient(135deg, #ff66cc, #cc0099);
+            color: white;
+            box-shadow:
+                    0 0 20px #ff33bb,
+                    0 0 40px #ff33bb;
+        }
+
+        /* Отступ для контента */
+        main {
+            padding-top: 90px;
+        }
+
+        /* Карточки */
+        section.card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            height: 100vh;
+            max-width: 100vw;
+            padding: 48px 80px;
+            border-radius: 32px;
+            box-sizing: border-box;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s cubic-bezier(0.4,0,0.2,1), transform 1s cubic-bezier(0.4,0,0.2,1);
+            box-shadow:
+                    0 0 20px 3px #ff66cc88,
+                    0 12px 40px rgba(255, 105, 180, 0.4);
+            background:
+                    radial-gradient(circle at top left, #ffe6f0cc, #ffd1e8cc),
+                    linear-gradient(135deg, #fff0fc, #f9d0f5cc);
+            backdrop-filter: saturate(180%) blur(16px);
+            border: 2px solid #ff66ccaa;
+            position: relative;
+            overflow: hidden;
+        }
+        section.card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Цвета карточек с японской палитрой */
+        .card.green {
+            background:
+                    radial-gradient(circle at top left, #d0f0c0cc, #a0d68acc),
+                    linear-gradient(135deg, #e7f7db, #c6e9b8cc);
+            box-shadow:
+                    0 0 25px 4px #7ad97acc,
+                    0 12px 40px rgba(75, 200, 75, 0.35);
+            border-color: #7ad97a;
+        }
+        .card.red {
+            background:
+                    radial-gradient(circle at top left, #f9c0c0cc, #f48a8acc);
+            box-shadow:
+                    0 0 25px 4px #e54a4acc,
+                    0 12px 40px rgba(255, 100, 100, 0.35);
+            border-color: #e54a4a;
+        }
+        .card.purple {
+            background:
+                    radial-gradient(circle at top left, #d9b3f4cc, #b37df3cc);
+            box-shadow:
+                    0 0 25px 4px #a15ad9cc,
+                    0 12px 40px rgba(150, 75, 200, 0.35);
+            border-color: #a15ad9cc;
+        }
+
+        /* Текст */
+        .card-text {
+            flex: 1 1 50%;
+            max-width: 600px;
+        }
+        .card-text h2 {
+            margin: 0 0 24px 0;
+            font-size: 36px;
+            line-height: 1.1;
+            font-weight: 700;
+            text-transform: none;
+            color: #4b004b;
+            text-shadow:
+                    2px 2px 0 #ff99d9,
+                    4px 4px 6px rgba(75, 0, 75, 0.3);
+            white-space: pre-line;
+            transition: color 0.3s ease;
+        }
+        .card-text h2.green {
+            color: #2d6a2d;
+            text-shadow:
+                    2px 2px 0 #a0f2a0,
+                    4px 4px 10px rgba(0, 75, 0, 0.3);
+        }
+        .card-text h2.red {
+            color: #a02020;
+            text-shadow:
+                    2px 2px 0 #f88,
+                    4px 4px 10px rgba(75, 0, 0, 0.3);
+        }
+        .card-text h2.purple {
+            color: #5a1a7a;
+            text-shadow:
+                    2px 2px 0 #d0a0f0,
+                    4px 4px 10px rgba(75, 0, 75, 0.3);
+        }
+        .card-text p {
+            margin: 0 0 28px 0;
+            font-weight: 700;
+            font-size: 20px;
+            color: #3b0a4f;
+            text-shadow: 1px 1px 2px #ffd1f7aa;
+        }
+
+        /* Кнопки с аниме эффектом */
+        .btn {
+            font-weight: 700;
+            font-size: 18px;
+            padding: 18px 48px;
+            border: none;
+            border-radius: 24px;
+            cursor: pointer;
+            user-select: none;
+            text-transform: lowercase;
+            color: #fff;
+            background: linear-gradient(135deg, #ff66cc, #cc0099);
+            box-shadow:
+                    0 0 10px #ff33bb,
+                    0 6px 20px #ff33bb;
+            transition:
+                    background 0.4s ease,
+                    box-shadow 0.5s ease,
+                    transform 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn.green {
+            background: linear-gradient(135deg, #7de87d, #2e7d32);
+            box-shadow:
+                    0 0 12px #2e7d32,
+                    0 6px 25px #2e7d32;
+        }
+        .btn.red {
+            background: linear-gradient(135deg, #f96b6b, #b71c1c);
+            box-shadow:
+                    0 0 12px #b71c1c,
+                    0 6px 25px #b71c1c;
+        }
+        .btn:hover {
+            filter: brightness(1.1);
+            transform: scale(1.05);
+            box-shadow:
+                    0 0 20px #ff33bb,
+                    0 8px 30px #ff33bb;
+        }
+        .btn.green:hover {
+            box-shadow:
+                    0 0 24px #2e7d32,
+                    0 8px 35px #2e7d32;
+        }
+        .btn.red:hover {
+            box-shadow:
+                    0 0 24px #b71c1c,
+                    0 8px 35px #b71c1c;
+        }
+        .btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 0 12px #ff33bb inset;
+        }
+        .btn.green:active {
+            box-shadow: 0 0 12px #2e7d32 inset;
+        }
+        .btn.red:active {
+            box-shadow: 0 0 12px #b71c1c inset;
+        }
+        .btn a {
+            color: inherit;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Аватары с "аниме" тенями и анимацией */
+        .avatar {
+            width: 280px;
+            height: 400px;
+            border-radius: 28px;
+            object-fit: cover;
+            background: #ffe6f0;
+            box-shadow:
+                    0 0 12px 3px #ff66ccaa,
+                    0 12px 30px rgba(255, 105, 180, 0.35);
+            flex-shrink: 0;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            cursor: default;
+            filter: drop-shadow(0 0 6px #ff66ccaa);
+        }
+        .avatar:hover {
+            transform: scale(1.1) rotate(3deg);
+            box-shadow:
+                    0 0 25px 6px #ff33bbcc,
+                    0 20px 50px rgba(255, 51, 187, 0.6);
+            filter: drop-shadow(0 0 12px #ff33bbcc);
+        }
+
+        /* Социальные иконки с неоном */
+        .socials {
+            display: flex;
+            gap: 28px;
+        }
+        .social-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff66cc, #cc0099);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            filter: drop-shadow(0 0 6px #ff33bb);
+            transition: background 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+            box-shadow:
+                    0 0 12px #ff33bb,
+                    0 0 20px #ff33bb inset;
+        }
+        .social-icon:hover {
+            background: linear-gradient(135deg, #ff33bb, #aa0077);
+            transform: scale(1.25) rotate(-5deg);
+            filter: drop-shadow(0 0 14px #ff33bb);
+            box-shadow:
+                    0 0 24px #ff33bb,
+                    0 0 40px #ff33bb inset;
+        }
+        .social-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: #fff;
+            filter: drop-shadow(0 0 2px #fff);
+        }
+
+        /* Раздел контактов */
+        #section4 {
+            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+            flex-direction: column !important;
+            justify-content: center !important;
+            border: 3px solid #ff66ccaa;
+            box-shadow:
+                    0 0 20px 4px #ff66ccaa inset;
+        }
+        #section4 .card-text {
+            max-width: 700px;
+            text-align: center;
+            font-size: 22px;
+            line-height: 1.5;
+            font-weight: 700;
+            color: #7a004a;
+            text-shadow: 1px 1px 2px #ffd1f7cc;
+        }
+        #section4 .card-text h2 {
+            font-size: 40px;
+            margin-bottom: 24px;
+            color: #c7007a;
+            text-shadow:
+                    2px 2px 0 #ff88ff,
+                    4px 4px 6px rgba(0,0,0,0.15);
+        }
+
+        /* Адаптив */
+        @media (max-width: 900px) {
+            section.card {
+                flex-direction: column;
+                height: auto;
+                padding: 50px 30px;
+            }
+            .card-text {
+                max-width: 100%;
+                text-align: center;
+            }
+            .avatar {
+                width: 220px;
+                height: 320px;
+                margin-top: 30px;
+            }
+            .btn {
+                font-size: 16px;
+                padding: 16px 40px;
+            }
+            .social-icon {
+                width: 64px;
+                height: 64px;
+            }
+            .social-icon svg {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        /* Адаптив для телефонов */
+        @media (max-width: 480px) {
+            nav {
+                flex-wrap: wrap;
+                gap: 12px;
+                padding: 12px 10px;
+                font-size: 12px;
+            }
+            nav a {
+                padding: 6px 12px;
+                flex: 1 1 45%;
+                text-align: center;
+                border-radius: 12px;
+            }
+
+            main {
+                padding-top: 100px;
+            }
+
+            section.card {
+                flex-direction: column;
+                padding: 30px 20px;
+                height: auto;
+                gap: 30px;
+            }
+
+            .card-text {
+                max-width: 100%;
+            }
+
+            .card-text h2 {
+                font-size: 24px;
+                line-height: 1.2;
+            }
+
+            .card-text p {
+                font-size: 16px;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 12px 28px;
+                border-radius: 14px;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .avatar {
+                width: 180px;
+                height: 260px;
+                margin-top: 20px;
+            }
+
+            .socials {
+                justify-content: center;
+                gap: 20px;
+            }
+
+            .social-icon {
+                width: 56px;
+                height: 56px;
+            }
+            .social-icon svg {
+                width: 28px;
+                height: 28px;
+            }
+
+            /* Раздел контактов */
+            #section4 .card-text {
+                font-size: 18px;
+                line-height: 1.4;
+                padding: 0 10px;
+            }
+            #section4 .card-text h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
 </head>
 <body>
-<header class="center-container">
-    <h1>Добро пожаловать на мою сайт-визитку!</h1>
-    <p>Меня зовут Николай</p>
-</header>
 
-<main class="center-container">
-    <section id="about">
-        <h2>Обо мне</h2>
-        <p>Я - Backend PHP Разработчик, занимаюсь Web разработкой.</p>
+<nav>
+    <a href="#section1" class="active">ГЛАВНАЯ</a>
+    <a href="#section2">обо мне</a>
+    <a href="#section3">отзывы</a>
+    <a href="#section4">контакты</a>
+</nav>
+
+<main>
+    <section id="section1" class="card green">
+        <div class="card-text">
+            <h2 class="green">айтишник,<br>бэкэнд,<br>разработчик</h2>
+            <p>Николай Олегович</p>
+            <button class="btn green"><a href="https://telegra.ph/CryptoWoman-07-06" style="text-decoration: none; color: inherit;">читать далее</a></button>
+        </div>
+        <img src="name.gif" alt="avatar 1" class="avatar" />
     </section>
 
-    <section id="services">
-        <h2>Услуги</h2>
-        <ul>
-            <li>Создание сайта - от 50$</li>
-            <li>Создание плагина для PocketMine-MP: от 10$</li>
-            <li>Улучшение существующего плагина: от 5$</li>
-        </ul>
+    <section id="section2" class="card red">
+        <div class="card-text">
+            <h2 class="red">около 20<br>положительных<br>отзывов</h2>
+            <p>Отзывы из студий</p>
+            <button class="btn red"><a href="https://vk.com/borderstudio" style="text-decoration: none; color: inherit;">смотреть отзывы</a></button>
+        </div>
+        <img src="otzivi.gif" alt="avatar 2" class="avatar" />
     </section>
 
-    <section id="contact">
-        <h2>Контакты</h2>
-        <p>Email: <a href="mailto:jemijbgtube@gmail.com">jemijbgtube@gmail.com</a></p>
-        <p>Телефон: +7 (953)-926-62-51</p>
-        <p>GitHub: <a href="https://github.com/stevedev8482">CLICK</a></p>
+    <section id="section3" class="card purple">
+        <div class="card-text">
+            <h2 class="purple">как<br>связаться<br>со мной?</h2>
+            <div class="socials">
+                <a href="https://vk.com/crypto_woman" class="social-icon vk" aria-label="ВКонтакте" title="ВКонтакте">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 5.52 4.48 10 10 10s10-4.48 10-10c0-5.52-4.48-10-10-10zm4.59 15.59h-2.48c-.24 0-.43-.12-.53-.33-.3-.57-.9-1.53-1.53-2.21-.1-.12-.13-.31-.07-.47.12-.36.6-1.27 1.06-1.84.11-.14.12-.33.03-.48-.08-.15-.23-.25-.4-.25h-2.3v-2h3.86c.22 0 .4.18.4.4v4.18c0 .22-.18.4-.4.4z"/></svg>
+                </a>
+                <a href="https://t.me/kolyan_php" class="social-icon telegram" aria-label="Telegram" title="Telegram">
+                    <svg viewBox="0 0 24 24"><path d="M21.5 3.5L3 10.5l5 1.5 1.5 5 3-8 6-5z"/></svg>
+                </a>
+            </div>
+        </div>
+        <img src="links.gif" alt="avatar 3" class="avatar" />
+    </section>
+
+    <section id="section4" class="card green">
+        <div class="card-text">
+            <h2>контакты</h2>
+            <p><a href="tel:+79959656251" style="text-decoration: none; color: #7a004a;">Телефон: +7-995-965-62-51</a><br>Почта: whyn.nswag@gmail.com<br>Томская область, +4 часа от Москвы</p>
+        </div>
     </section>
 </main>
 
-<footer class="center-container">
-    <p>&copy; 2025 stevedev8482. Все права защищены.</p>
-</footer>
+<!-- Контейнер для сакуры -->
+<div id="sakura-container"></div>
+
+<script>
+    // Анимация появления карточек при скролле
+    const cards = document.querySelectorAll('section.card');
+    const options = { threshold: 0.3 };
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, options);
+    cards.forEach(card => observer.observe(card));
+
+    // Подсветка активного пункта меню при скролле
+    const navLinks = document.querySelectorAll('nav a');
+    const sections = [...cards];
+
+    window.addEventListener('scroll', () => {
+        let scrollPos = window.scrollY + window.innerHeight / 3;
+
+        sections.forEach((section, i) => {
+            if (section.offsetTop <= scrollPos && (section.offsetTop + section.offsetHeight) > scrollPos) {
+                navLinks.forEach(link => link.classList.remove('active'));
+                if(navLinks[i]) navLinks[i].classList.add('active');
+            }
+        });
+    });
+
+    // Плавный скролл по меню
+    navLinks.forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+            if(targetSection) {
+                window.scrollTo({
+                    top: targetSection.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Звук при нажатии на кнопку (Web Audio API)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playClickSound() {
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        osc.type = 'triangle'; // мягкий звук
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime); // частота 880 Hz (ля)
+        gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        osc.start();
+        osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.15);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+
+        osc.stop(audioCtx.currentTime + 0.15);
+    }
+
+    // Навесить на все кнопки .btn
+    document.querySelectorAll('.btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            playClickSound();
+        });
+    });
+
+    // --- Эффект падающей сакуры ---
+    const sakuraContainer = document.getElementById('sakura-container');
+    const petalsCount = 40;
+    const petals = [];
+
+    // Создаем лепестки
+    for(let i = 0; i < petalsCount; i++) {
+        const petal = document.createElement('div');
+        petal.classList.add('sakura');
+        resetPetal(petal, true);
+        sakuraContainer.appendChild(petal);
+        petals.push(petal);
+    }
+
+    function resetPetal(petal, initial = false) {
+        petal.style.left = Math.random() * window.innerWidth + 'px';
+        petal.style.top = initial ? Math.random() * window.innerHeight + 'px' : '-40px';
+        petal.style.opacity = 0.5 + Math.random() * 0.5;
+        petal.style.transform = `rotate(${Math.random() * 360}deg)`;
+        petal.speedY = 1 + Math.random() * 2; // скорость падения
+        petal.speedX = (Math.random() - 0.5); // колебания по горизонтали
+        petal.rotationSpeed = (Math.random() - 0.5) * 2; // скорость вращения
+        petal.posX = parseFloat(petal.style.left);
+        petal.posY = parseFloat(petal.style.top);
+    }
+
+    function animatePetals() {
+        petals.forEach(petal => {
+            petal.posY += petal.speedY;
+            petal.posX += petal.speedX;
+            petal.style.top = petal.posY + 'px';
+            petal.style.left = petal.posX + 'px';
+
+            let currentRotation = getRotation(petal.style.transform);
+            currentRotation += petal.rotationSpeed;
+            petal.style.transform = `rotate(${currentRotation}deg)`;
+
+            // Если вышли за нижнюю границу или вбок, сбросить в начало сверху
+            if(petal.posY > window.innerHeight + 40 || petal.posX < -40 || petal.posX > window.innerWidth + 40) {
+                resetPetal(petal);
+            }
+        });
+        requestAnimationFrame(animatePetals);
+    }
+
+    // Парсер угла вращения из transform rotate
+    function getRotation(transform) {
+        const match = /rotate\(([-0-9.]+)deg\)/.exec(transform);
+        return match ? parseFloat(match[1]) : 0;
+    }
+
+    animatePetals();
+
+    // Обновление размеров при ресайзе
+    window.addEventListener('resize', () => {
+        petals.forEach(petal => {
+            if (petal.posX > window.innerWidth) petal.posX = Math.random() * window.innerWidth;
+        });
+    });
+</script>
+
 </body>
 </html>
